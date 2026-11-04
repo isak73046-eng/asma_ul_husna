@@ -109,4 +109,279 @@ const String _raw = '''
 الْوَاحِد|Al-Wahid|یو|د توحید ټینګول
 الْأَحَد|Al-Ahad|یوازینی|له شرک څخه ځان ساتل
 الصَّمَد|As-Samad|بې نیازه، ټول ورته اړتیا لري|یوازې له الله څخه غوښتنه
-الْقَادِر|Al-Qadir|وس لرونکی|په الله باور چې هر څه
+الْقَادِر|Al-Qadir|وس لرونکی|په الله باور چې هر څه کولای شي
+الْمُقْتَدِر|Al-Muqtadir|بشپړ قدرت لرونکی|په ناهیلۍ کې امید
+الْمُقَدِّم|Al-Muqaddim|مخکې کوونکی|د خیر په کارونو کې مخکې کېدل
+الْمُؤَخِّر|Al-Mu'akhkhir|وروسته کوونکی|په ځند کې صبر
+الْأَوَّل|Al-Awwal|لومړی، پرته له پیل|د الله په ازلیت فکر
+الْآخِر|Al-Akhir|وروستی، پرته له پای|د فنا د دنیا یادونه
+الظَّاهِر|Az-Zahir|ښکاره|په کائناتو کې د الله نښې لیدل
+الْبَاطِن|Al-Batin|پټ، د ټولو پټو خبر|په خلوت کې تقوا
+الْوَالِي|Al-Wali|د کارونو والي|د الله په تدبیر رضا
+الْمُتَعَالِي|Al-Muta'ali|ډېر لوړ|له هر نقص څخه د الله پاکوالی
+الْبَر|Al-Barr|ډېر نیکوکار|د نیکۍ او احسان زده کړه
+التَّوَّاب|At-Tawwab|توبه قبلوونکی|په توبه کې ژر کول
+الْمُنْتَقِم|Al-Muntaqim|له ظالمانو انتقام اخیستونکی|له ظلم څخه ځان ساتل
+الْعَفُو|Al-Afuww|ډېر معاف کوونکی|په شپه د معافۍ غوښتنه
+الرَّؤُوف|Ar-Ra'uf|ډېر نرم او مهربان|د نورو سره نرمي
+مَالِكُ الْمُلْك|Malik-ul-Mulk|د ټول ملک مالک|په دنیا کې د ملکیت غرور پرېښودل
+ذُو الْجَلَالِ وَالْإِكْرَام|Dhul-Jalali wal-Ikram|د عظمت او کرامت خاوند|د دعا په وخت ورسره غوښتنه
+الْمُقْسِط|Al-Muqsit|په انصاف کوونکی|په انصاف رواج
+الْجَامِع|Al-Jami'|راټولوونکی|د خلکو ترمنځ د یووالي دعا
+الْغَنِي|Al-Ghani|بې نیازه|د خلکو له غوښتنې بې نیازي
+الْمُغْنِي|Al-Mughni|بې نیازه کوونکی|د حلال روزۍ لپاره دعا
+الْمَانِع|Al-Mani'|منع کوونکی|د بلا او شر له رد څخه دعا
+الضَّار|Ad-Darr|ضرر پېښوونکی|یوازې د الله پر لاس باور
+النَّافِع|An-Nafi'|ګټه رسوونکی|د ګټور علم او عمل غوښتنه
+النُّور|An-Nur|رڼا|د زړه د رڼا لپاره دعا
+الْهَادِي|Al-Hadi|هدایت کوونکی|د سمې لارې غوښتنه
+الْبَدِيع|Al-Badi'|بې نمونې پیدا کوونکی|د الله په صنعت حیرانتیا
+الْبَاقِي|Al-Baqi|تل پاتې|د فاني دنیا څخه عبرت
+الْوَارِث|Al-Warith|د ټولو وارث|د نیکو اعمالو پرېښودل
+الرَّشِيد|Ar-Rashid|سمې لارې ښودونکی|په کارونو کې د رشد غوښتنه
+الصَّبُور|As-Sabur|ډېر صبر کوونکی|د صبر لپاره دعا
+''';
+
+final List<AllahName> kNames = () {
+  final lines = _raw.trim().split('\n');
+  final out = <AllahName>[];
+  for (var i = 0; i < lines.length; i++) {
+    final p = lines[i].split('|');
+    out.add(AllahName(i + 1, p[0], p[1], p[2], p[3]));
+  }
+  return out;
+}();
+
+class SplashPage extends StatefulWidget {
+  const SplashPage({super.key});
+  @override
+  State<SplashPage> createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
+  late final AnimationController _spin =
+      AnimationController(vsync: this, duration: const Duration(seconds: 12))
+        ..repeat();
+  late final AnimationController _intro = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 1800))
+    ..forward();
+
+  @override
+  void initState() {
+    super.initState();
+    Timer(const Duration(milliseconds: 3600), () {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 700),
+        pageBuilder: (_, __, ___) => const HomePage(),
+        transitionsBuilder: (_, a, __, child) =>
+            FadeTransition(opacity: a, child: child),
+      ));
+    });
+  }
+
+  @override
+  void dispose() {
+    _spin.dispose();
+    _intro.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scale = CurvedAnimation(parent: _intro, curve: Curves.elasticOut);
+    final fade = CurvedAnimation(
+        parent: _intro, curve: const Interval(0.4, 1, curve: Curves.easeIn));
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [kDark, kGreen, Color(0xFF0E7A62)],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ScaleTransition(
+              scale: scale,
+              child: SizedBox(
+                width: 190,
+                height: 190,
+                child: AnimatedBuilder(
+                  animation: _spin,
+                  builder: (_, __) => CustomPaint(
+                    painter: StarPainter(_spin.value * 2 * math.pi),
+                    child: const Center(
+                      child: Text('الله',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 44,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 36),
+            FadeTransition(
+              opacity: fade,
+              child: Column(children: [
+                const Text('اسماء الحسنى',
+                    style: TextStyle(
+                        color: kGold,
+                        fontSize: 34,
+                        fontWeight: FontWeight.bold)),
+                const SizedBox(height: 8),
+                Text('د الله ج ښکلي نومونه',
+                    style: TextStyle(
+                        color: Colors.white.withOpacity(.85), fontSize: 16)),
+                const SizedBox(height: 40),
+                const SizedBox(
+                  width: 28,
+                  height: 28,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2.5, color: kGold),
+                ),
+              ]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class StarPainter extends CustomPainter {
+  final double angle;
+  StarPainter(this.angle);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final c = size.center(Offset.zero);
+    final r = size.width / 2 - 6;
+    final p = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.5
+      ..color = kGold;
+
+    void square(double rot, double rad) {
+      final path = Path();
+      for (var i = 0; i < 4; i++) {
+        final a = rot + i * math.pi / 2;
+        final o = Offset(c.dx + rad * math.cos(a), c.dy + rad * math.sin(a));
+        i == 0 ? path.moveTo(o.dx, o.dy) : path.lineTo(o.dx, o.dy);
+      }
+      path.close();
+      canvas.drawPath(path, p);
+    }
+
+    square(angle + math.pi / 4, r);
+    square(angle, r);
+    square(-angle / 2 + math.pi / 4, r * .72);
+    p.color = kGold.withOpacity(.4);
+    canvas.drawCircle(c, r * .95, p);
+  }
+
+  @override
+  bool shouldRepaint(StarPainter old) => old.angle != angle;
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final _pc = PageController(viewportFraction: .86);
+  int _page = 0;
+  Timer? _timer;
+  final List<AllahName> _featured = [
+    kNames[1], kNames[0], kNames[16], kNames[14], kNames[17], kNames[44], kNames[81], kNames[92],
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 4), (_) {
+      if (!_pc.hasClients) return;
+      final next = (_page + 1) % _featured.length;
+      _pc.animateToPage(next,
+          duration: const Duration(milliseconds: 600), curve: Curves.easeInOut);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pc.dispose();
+    super.dispose();
+  }
+
+  void _copy(AllahName n) {
+    Clipboard.setData(ClipboardData(text: n.shareText));
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: const Text('کاپي شو'),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: kGreen,
+        duration: const Duration(seconds: 1),
+      ));
+  }
+
+  void _share(AllahName n) => Share.share(n.shareText);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            backgroundColor: kGreen,
+            foregroundColor: Colors.white,
+            centerTitle: true,
+            title: const Text('اسماء الحسنى',
+                style: TextStyle(fontWeight: FontWeight.bold)),
+          ),
+          SliverToBoxAdapter(child: _slider()),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
+            sliver: SliverToBoxAdapter(
+              child: Row(children: [
+                Container(width: 4, height: 20, color: kGold),
+                const SizedBox(width: 8),
+                const Text('د الله ج ټول نومونه (٩٩)',
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ]),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+            sliver: SliverList.builder(
+              itemCount: kNames.length,
+              itemBuilder: (_, i) => _tile(kNames[i]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _slider() {
+    return Container(
+      color: kGreen,
+      padding: const EdgeInsets.only(bottom: 16, top: 4),
+      child: Column(children: [
+        SizedBox(
+          height: 210,
+          child: PageView.builder(
+            controller: _pc,
+            itemCount: _featured.length,
+            onPageChanged: (i) => setState(() => _page = i),
+            itemBuilder: (_, i)
