@@ -384,4 +384,153 @@ class _HomePageState extends State<HomePage> {
             controller: _pc,
             itemCount: _featured.length,
             onPageChanged: (i) => setState(() => _page = i),
-            itemBuilder: (_, i)
+                        itemBuilder: (_, i) {
+              final n = _featured[i];
+              return AnimatedScale(
+                scale: i == _page ? 1 : .92,
+                duration: const Duration(milliseconds: 300),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 6),
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    gradient: const LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [kDark, Color(0xFF138A70)],
+                    ),
+                    border: Border.all(color: kGold, width: 1.6),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.black38,
+                          blurRadius: 12,
+                          offset: Offset(0, 6))
+                    ],
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(n.ar,
+                          style: const TextStyle(
+                              color: kGold,
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text(n.tr,
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 14)),
+                      const SizedBox(height: 10),
+                      Text(n.meaning,
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 16)),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(
+            _featured.length,
+            (i) => AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              width: i == _page ? 22 : 7,
+              height: 7,
+              decoration: BoxDecoration(
+                color: i == _page ? kGold : Colors.white38,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Widget _tile(AllahName n) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(.06),
+              blurRadius: 8,
+              offset: const Offset(0, 3))
+        ],
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          Container(
+            width: 36,
+            height: 36,
+            alignment: Alignment.center,
+            decoration:
+                const BoxDecoration(color: kGreen, shape: BoxShape.circle),
+            child: Text('${n.no}',
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(n.ar,
+                      style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: kDark)),
+                  Text(n.tr,
+                      style: TextStyle(
+                          fontSize: 13, color: Colors.grey.shade600)),
+                ]),
+          ),
+          IconButton(
+            tooltip: 'کاپي',
+            onPressed: () => _copy(n),
+            icon: const Icon(Icons.copy_rounded, color: kGreen),
+          ),
+          IconButton(
+            tooltip: 'شیر',
+            onPressed: () => _share(n),
+            icon: const Icon(Icons.share_rounded, color: kGreen),
+          ),
+        ]),
+        const Divider(height: 22),
+        _line('معنا', n.meaning),
+        const SizedBox(height: 6),
+        _line('ګټه', n.benefit),
+      ]),
+    );
+  }
+
+  Widget _line(String label, String text) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+            decoration: BoxDecoration(
+                color: kGold.withOpacity(.2),
+                borderRadius: BorderRadius.circular(8)),
+            child: Text(label,
+                style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF7A6100))),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+              child: Text(text, style: const TextStyle(fontSize: 14.5, height: 1.5))),
+        ],
+      );
+}
